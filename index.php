@@ -9,7 +9,7 @@ if(isset($_POST['send'])){
    $number = mysqli_real_escape_string($conn, $_POST['contact']);
    $msg = mysqli_real_escape_string($conn, $_POST['message']);
 
-   echo sendMail($email);
+   echo sendMail($email,$name);
 
    $select_message = mysqli_query($conn, "SELECT * FROM `contact_form` WHERE name = '$name' AND email = '$email' AND number = '$number' AND message = '$msg'") or die('query failed');
    
@@ -23,17 +23,47 @@ if(isset($_POST['send'])){
 }
 
 ?>
-sendMail{
+<script>
+   //call the function indicating what you parsed from the function above
+function sendMail($to,$name){
+   //code to display errors , if any :)
+    ini_set( 'display_errors', 1 );
+    error_reporting( E_ALL );
+    //input your own email here
+    $from = "info@kututa.com";
+    //email subject here 
+    $subject = "THANKYOU FOR CONTACTING US";
+    //your custom message should be here 
+    $message = "Dear ".$name" thankyou  for contacting Kututa web design , I will get back to you as soon as i can 
+    
+    
+    Kind Regards, 
+    
+    Kututa";
+    //PHP mailer headers
+    $headers = "MIME-Version: 1.0" . "\r\n";
+    $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
 
+    $headers = "From:" . $from;
+    //check if the mail has been sent
+    if(mail($to,$subject,$message, $headers)) {
+        $res = [
+            'message' => ' '
+        ];
+        return;
+    } else {
+        return "Email not sent";
+    }
 }
-
+</script>
 <!DOCTYPE html>
 <html lang="en">
 <head>
+   <!--Add your Meta keywords and descripion here for SEO purposes-->
    <meta charset="UTF-8">
    <meta http-equiv="X-AUA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Kututa, Mr Website Designer</title>
+   <title>Kututa, Website Designer</title>
 
    <!-- font awesome cdn link  -->
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
@@ -48,7 +78,7 @@ sendMail{
 <body>
 
 <?php
-
+//what does this code do ?
 if(isset($message)){
    foreach($message as $message){
       echo '
@@ -77,7 +107,7 @@ if(isset($message)){
       <a href="#portfolio">portfolio</a>
       <a href="#contact">contact</a>
    </nav>
-
+<!--ADD YOUR SOCIAL TAGS WHERE THERE IS A # -->
    <div class="follow">
       <a href="#" class="fab fa-facebook-f"></a>
       <a href="#" class="fab fa-twitter"></a>
@@ -99,7 +129,7 @@ if(isset($message)){
    </div>
 
    <div class="content">
-      <h3 data-aos="fade-up">hi, i am Vincent kututa</h3>
+      <h3 data-aos="fade-up">Hi, i am Vincent kututa</h3>
       <span data-aos="fade-up">web designer & developer</span>
       <p data-aos="fade-up"> I, do designing and building the interface, navigation and aesthetic of websites for businesses and clients.</p>
       <a data-aos="fade-up" href="#about" class="btn">about me</a>
@@ -312,8 +342,8 @@ if(isset($message)){
 <section class="contact" id="contact">
 
    <h1 class="heading" data-aos="fade-up"> <span>contact me</span> </h1>
-
-   <form action="" id="clientMessage" method="post">
+<!--YOU'LL BE PARSING THE DATA FROM THIS FORM TO THE PHP CODE ABOVE , REPLACE THE ID SO THAT THE TWO MATCH -->
+   <form action="#" id="clientMessage" method="post">
       <div class="flex">
          <input data-aos="fade-right" type="text" id="name" name="name" placeholder="enter your name" class="box" required>
          <input data-aos="fade-left" type="email" id="email" name="email" placeholder="enter your email" class="box" required>
@@ -350,17 +380,6 @@ if(isset($message)){
 <!-- contact section ends -->
 
 <div class="credit"> &copy; copyright @ <?php echo date('Y'); ?> by <span>vincent kututa</span> </div>
-
-
-
-
-
-
-
-
-
-
-
 
 <!-- custom js file link  -->
 <script src="js/script.js"></script>
